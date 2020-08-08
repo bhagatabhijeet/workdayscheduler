@@ -1,15 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workday Scheduler</title>
-</head>
-<body>
 
-    <!-- jQuery CDN -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- main style -->
+    <link rel="stylesheet" href="styles/main.css">
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-h1">Workday Scheduler</div>
+        <!-- <img  id="imgcal" src="https://unsplash.it/280/150"/>                 -->
+        <!-- <div class="image-calendar">
+            </div> -->
+    </header>
+    <div class="container">
+        <div class="today"></div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col">
+                        <div class="row justify-content-center">
+                            <img id="imgcal" src="https://unsplash.it/200/200" />
+                        </div>
+                        <div id="showHidediv" class="justify-content-center"><button id="showHideBtn">Show/Hide Calendar</button></div>
+                        <div class="row justify-content-center">
+                            <div class="monthrow">
+                                <button id="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+                                <span id="monthName">August</span>,
+                                <span id="yearName">2020</span>
+                                <button id="next"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+                            </div>                            
+                        </div>
+                        <div id="backToTodaydiv"><button id="backToToday">Back to today</button></div>
+                    </div>
+                </div>
+                
+                <!-- <hr/> -->
+                <div class="row calcontainer">
+                    <div class="col-sm-1" id="day0"><label class="daylabel">Sun</label></div>
+                    <div class="col-sm-1" id="day1"><label class="daylabel">Mon</label></div>
+                    <div class="col-sm-1" id="day2"><label class="daylabel">Tue</label></div>
+                    <div class="col-sm-1" id="day3"><label class="daylabel">Wed</label></div>
+                    <div class="col-sm-1" id="day4"><label class="daylabel">Thu</label></div>
+                    <div class="col-sm-1" id="day5"><label class="daylabel">Fri</label></div>
+                    <div class="col-sm-1" id="day6"><label class="daylabel">Sat</label></div>
+                </div>
+                <div class="row"></div>
+
+                <!-- <div class="calendar">
+                <div class="month">      
+                    <ul>
+                      <li class="prev">&#10094;</li>
+                      <li class="next">&#10095;</li>
+                      <li>
+                        August<br>
+                        <span style="font-size:18px">2017</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <ul class="weekdays">
+                    <li>Mo</li>
+                    <li>Tu</li>
+                    <li>We</li>
+                    <li>Th</li>
+                    <li>Fr</li>
+                    <li>Sa</li>
+                    <li>Su</li>
+                  </ul>
+            </div> -->
+               
+            </div>
+            <div class="col-lg-7">
+                TEST
+            </div>
+        </div>
+
+        <!-- <div class="calendars">
+            <div class="week"></div>
+
+            <div class="yearcontainer">
+                <button id="prevYearBtn" class ="monthbtn"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+                <button id="nextYearBtn" class ="monthbtn"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+            </div>
+            <div class="monthcontainer">
+                <button id="prevMonthBtn" class ="monthbtn"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+                <button id="nextMonthBtn" class ="monthbtn"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+            </div>
+
+        </div>
+        <div id="message"></div> -->
+    </div>
+    <footer>
+        Abhijeet Bhagat
+    </footer>
+    <div class="leftlightdiv">
+        <hr class="wire" />
+        <img id="left-light" src="images/left-light.png" />
+    </div>
+    <img id="bottom-right-plant" src="images/plant-right.png" />
+    <img id="bottom-left-plant" src="images/plant-left.png" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Moment CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <!-- jQuery CDN -->
+
+    <!-- Moment.js -->
+    <script src="script/moment.js"></script>
+
+    <!-- main.js -->
+    <script src="script/main.js"></script>
 </body>
+
 </html>

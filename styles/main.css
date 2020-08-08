@@ -1,0 +1,231 @@
+body{
+    /* background:linear-gradient(#666666,#4e4e4e); */
+    /* background-color:#4e4e4e ; */
+    background: url("../images/wall.jpg");
+
+    background-position: center center;
+  
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
+  
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+  
+  /* This is what makes the background image rescale based
+     on the container's size */
+  background-size: cover;
+  margin: 0 0 0 0;;
+}
+.container{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    /* border:2px double #486d12; */
+    /* border-left: none; */
+    position: relative;
+    margin-top: 40px;    
+}
+
+header{
+    text-align: left;
+    align-items: center;
+    color:rgb(143, 142, 142);
+    background-color: #050404;
+    margin: 0px;
+    position: fixed;
+    top:0;
+    width:100%;
+    z-index: 1;
+}
+.header-h1{
+    /* color:#050404; */
+    font-size: 30px;
+    /* display: inline-block; */
+    text-align: left;
+    margin-left: 10%;
+    /* width: 40%; */
+    /* background: -webkit-linear-gradient(rgb(10, 15, 12),#61b1dc);
+    background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+}
+
+.image-calendar{
+    /* position: fixed; */
+    /* display: inline-block; */
+    width:280px;
+    height: 150px;
+    border:black outset 4px;
+    /* right: 50px; */
+    /* top: 0px; */
+    /* border-top: #050404 dashed 2px; */
+    box-shadow: 0 0 4px blue;
+    margin: 5px 5px;
+}
+.today{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    text-align: right;
+    font-weight: 600;
+    text-decoration: underline;
+    color:#486d12;
+    margin-top: 5px;
+}
+
+#bottom-right-plant{
+    position: fixed;
+    right:-1%;
+    bottom:-1%;
+    height: 100px;
+}
+
+#bottom-left-plant{
+    position: fixed;
+    left:-1%;
+    bottom:-1%;
+    height: 100px;
+}
+
+#left-light{
+    position: relative;
+    width:20px;
+    margin: 0 0 0 0;
+    /* padding-top: -1px; */
+    top:-5px;
+    left:-0.0px;
+}
+
+.leftlightdiv{
+    position:fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left:auto;
+    margin-right: auto;
+    top:0;
+    left:1%;
+}
+.wire{
+    top:0px;
+    margin:0;
+    height: 100%;
+    border-left: 2px solid black;
+}
+
+footer{
+    height: 30px;
+    width: 100%;   
+    position: fixed;
+    bottom: 0;
+   text-align: center;
+}
+
+.calcontainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;    
+    border: 1px solid gray;
+    align-content: center;
+    padding-right: 10px;
+    border-radius: 10%;
+    display: none;
+}
+
+.daylabel{
+    color:#486d12;
+}
+.daybtn{
+    background-color: #486d12;
+    border-radius: 50%;
+    border:none;
+}
+.daybtn:disabled{
+    background-color: gray;
+    opacity: .5;    
+}
+
+.daylabel,.daybtn{
+    width:30px;
+    height:30px;
+    margin:1px;
+}
+
+#backToTodaydiv,#showHidediv{
+    margin-left: auto;
+    margin-right: auto; 
+    width:120px;
+    display:none;
+   
+}
+#showHidediv{
+    display: block;
+    width:180px;
+    text-align: center;
+}
+#backToToday{
+    background-color: #486d12;
+}
+  
+#imgcal{   
+    border: 10px outset #e2b37b;
+}
+
+#prev,#next,#monthName,#yearName{
+    font-size: 20px;
+    /* margin:5px; */
+    color:#503009;
+    background-color: #e2b37b;
+    
+}
+#prev,#next{
+    visibility: hidden;
+}
+
+.monthrow{
+    background-color: #e2b37b;
+    border: 1px solid;
+    margin-top: 2px;
+    /* padding:5px; */
+    /* border-radius: 5px; */
+}
+
+@media only screen and (max-width:280px){
+    .image-calendar{
+        display: none;
+    }
+}
+
+@media only screen and (max-width:767px){
+    body{
+        background: url("../images/wall-mobile.jpg");
+        background-position: center center;
+  
+        /* Background image doesn't tile */
+        background-repeat: no-repeat;
+        
+        /* Background image is fixed in the viewport so that it doesn't move when 
+           the content's height is greater than the image's height */
+        background-attachment: fixed;
+        
+        /* This is what makes the background image rescale based
+           on the container's size */
+        background-size: cover;
+    }
+
+    #bottom-right-plant{
+        position: fixed;
+        right:-1%;
+        bottom:0%;
+        height: 75px;
+    
+    }
+    #bottom-left-plant{
+        position: fixed;
+        left:-1%;
+        bottom:-1%;
+        height: 75px;
+    }
+
+}
+
