@@ -20,7 +20,7 @@ $(document).ready(function () {
     setFirstLastDayOfMonth();
     displayMonth(currentSelectedMonth);
     displayTimeSlots();
-    $("#selectedDay").text(`${now.year()}-${parseInt(now.month())+1}-${now.date()}`);
+    $("#selectedDay").text(`${now.year()}-${parseInt(now.month()) + 1}-${now.date()}`);
 
     // $("#prev").on("click",function(){
     //     $("#imgcal").attr("src","https://unsplash.it/200/200");
@@ -112,33 +112,83 @@ $("#showHideBtn").on("click", function () {
 });
 
 function displayTimeSlots() {
-    let timeslotArr = ["9:AM", "10:AM", "11:AM", "12:PM", "1:PM", "2:PM", "3:PM", "4:PM", "5:PM"]
+    let timeLabelArr = ["9:AM", "10:AM", "11:AM", "12:PM", "1:PM", "2:PM", "3:PM", "4:PM", "5:PM"];
+    let timeslotArr = ["9:AM", "10:AM", "11:AM", "12:PM", "13:PM", "14:PM", "15:PM", "16:PM", "17:PM"];
+
     $(".timeSlotsContainer").empty();
-    timeslotArr.forEach(function (tSlot) {
+    timeslotArr.forEach(function (tSlot, index) {
+        let ValLabelArray = timeLabelArr[index].split(":");
+        let ValueArray = tSlot.split(":");
+        // This is the full length div. It houses one label, one span for the input text  and one span for the lock unlock button
         let $timeslotDiv = $("<div>");
         $timeslotDiv.addClass("timeSlotDiv");
 
+        //the day time label
         let $timeSlotLabel = $("<label>");
         $timeSlotLabel.addClass("timeSlotLabel");
 
+        //Add label text  eample 9AM, 10AM where AM is superscripted text
+        $timeSlotLabel.html(ValLabelArray[0] + "<sup><u>" + ValLabelArray[1] + "</u></sup>");
+
+        //span 1 for housing the input text and checkbox
         let $timeSlotItemText = $("<span>");
+        $timeSlotItemText.attr("id", "InputSpan" + ValueArray[0] + ValueArray[1]);
         $timeSlotItemText.addClass("timeSlotItemText");
+
+        //Logic to color
+        let t1 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + ValueArray[0] + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
+        let t2 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + ValueArray[0] + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
+        t2.add(1,'h');
+        
+        // let t2 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
+        //t2=t1.add(1,'hours');
+        console.log("t1",t1);
+        console.log("t2",t2);
+        if (moment().isBetween(t1, t2)) {
+            $timeSlotItemText.css("background-color", "#e2b37b");
+        }
+        else {
+            if(moment().isAfter(t2)){
+            // if (moment().isAfter(moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A"))) {
+                $timeSlotItemText.css("background-color", "#b4b4b4");
+            }
+            else {
+                $timeSlotItemText.css("background-color", "#98FB98");
+            }
+        }
+
+
+        //span 2 for housing the lock/unlock button
         let $timeSlotItemBtns = $("<span>");
+        $timeSlotItemBtns.attr("id", "ButtonSpan" + ValueArray[0] + ValueArray[1]);
         $timeSlotItemBtns.addClass("timeSlotItemBtnsSpan");
-        //Add label
-        $timeSlotLabel.html(tSlot.split(":")[0] + "<sup><u>" + tSlot.split(":")[1] + "</u></sup>");
-        //Add input to TimeSlotItemText
+
+        //Add input to TimeSlotItemText i.e span1
         $inputItem = $("<input type='text'>");
         $inputItem.addClass("inputItemText");
-        // $inputItem.attr("readonly","true");
+        //Give id and data-id to the input text
+        $inputItem.attr("id", "Input-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
+        $inputItem.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
+        $inputItem.attr("readonly", "true");
         //Add checkbox to TimeSlotItemText
         $inputItemCheck = $("<input type='checkbox'>");
         $inputItemCheck.addClass("inputItemCheck");
-        $inputItemCheck.on("click",checkboxClicked);
+
+        //Give id and data-id to the checkbox
+        $inputItemCheck.attr("id", "Check-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
+        $inputItemCheck.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
+
+        $inputItemCheck.on("click", checkboxClicked);
 
         $unlockAndSaveBtn = $("<button>");
         $unlockAndSaveBtn.addClass("unlockAndSaveBtn");
+
+        //Give id and data-id to the unlock button
+        $unlockAndSaveBtn.attr("id", "UnlockBtn-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
+        $unlockAndSaveBtn.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
+
         $unlockAndSaveBtn.html('<i class="fa fa-lock" aria-hidden="true"></i>')
+        $unlockAndSaveBtn.on("click", unlockButtonClicked);
 
         $timeSlotItemText.append($inputItem);
         $timeSlotItemText.append($inputItemCheck);
@@ -150,16 +200,7 @@ function displayTimeSlots() {
         $timeslotDiv.append($timeSlotItemBtns);
 
         $(".timeSlotsContainer").append($timeslotDiv);
-//trying
-        $(".unlockAndSaveBtn").on("click",function(e){
-            e.stopPropagation();
-            alert("unlock");
-            // let btnDataArr=$(this).data("id").split("-");
-            
-            // $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1])+1}-${btnDataArr[2]}`);
-            // console.log($(this));
-            // alert(event.target.id);
-        });
+
     });
 }
 
@@ -192,7 +233,7 @@ function displayMonth(selectedMonth) {
         $btn.addClass("daybtn");
         // $btn.css("width", "35px");
         // $btn.css("height", "35px");   
-        $btn.attr("id",  "calday"+ n.toString());
+        $btn.attr("id", "calday" + n.toString());
         $btn.attr("data-id", now.year() + "-" + now.month() + "-" + n);
         $("#day" + moment([now.year(), now.month(), n]).day()).append($btn);
     }
@@ -215,19 +256,22 @@ function displayMonth(selectedMonth) {
 $("#backToToday").on("click", function () {
     now = moment();
     setFirstLastDayOfMonth();
-    let dispMonthAndYear =  displayMonth(currentSelectedMonth);
+    let dispMonthAndYear = displayMonth(currentSelectedMonth);
     dispMonthAndYear();
     // displayMonth();
     displayTimeSlots();
     // showHideBackToTodayDiv();
-    $("#selectedDay").text(`${now.year()}-${parseInt(now.month())+1}-${now.date()}`);
+    $("#selectedDay").text(`${now.year()}-${parseInt(now.month()) + 1}-${now.date()}`);
 });
 
 
-$(".calcontainer").on("click","button",function(){
-    let btnDataArr=$(this).data("id").split("-");
-    
-    $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1])+1}-${btnDataArr[2]}`);
+$(".calcontainer").on("click", "button", function () {
+    let btnDataArr = $(this).data("id").split("-");
+
+    $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
+    now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
+    setFirstLastDayOfMonth();
+    displayTimeSlots()
     // console.log($(this));
     // alert(event.target.id);
 });
@@ -238,19 +282,49 @@ $(".calcontainer").on("click","button",function(){
 //     alert("checkbox clicked");
 // });
 
-function checkboxClicked(){
+function checkboxClicked() {
     alert("checkbox clicked");
-    $(this).prev().css("text-decoration","line-through");
+    // $(this).prev().css("text-decoration","line-through");
 
 }
 
+function unlockButtonClicked() {
+    let targetId = $(this).attr("id");
+    let targetDataId = $(this).data().id;
+    let ValueArray = targetDataId.split("-");
+    let stringTargetId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2];
+    let stringTargetHourAfterId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2].split(" ")[0] + " " + (parseInt(ValueArray[2].split(" ")[1]) + 1);
 
-// $(".timeSlotItemBtnsSpan").on("click","button.unlockAndSaveBtn",function(){
 
-//     alert("unlock");
-//     // let btnDataArr=$(this).data("id").split("-");
-    
-//     // $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1])+1}-${btnDataArr[2]}`);
-//     // console.log($(this));
-//     // alert(event.target.id);
+    console.log(stringTargetId);
+    console.log(ValueArray[2]);
+    console.log(stringTargetHourAfterId);
+    let m1 = moment(stringTargetId, "YYYY-MM-DD hh:mm");
+    let m2 = m1.clone();
+    m2.add(1,'h');
+    if(moment().isAfter(m2)){
+    // if (moment().isAfter(moment(stringTargetHourAfterId, "YYYY-MM-DD hh:mm"))) {
+        // if(moment(stringTargetId,"YYYY-MM-DD hh:mm").isBefore(moment())){
+        // alert("event in past cannot be edited");
+        $("#message").fadeIn(1000);
+        $("#message").text("Cannot edit event in the past.You can only mark the event complete.");
+
+        $("#message").fadeOut(4000);
+        return;
+    }
+    let inputId = targetId.replace("UnlockBtn", "Input");
+
+    $("#" + inputId).attr("readonly", false);
+    $("#" + inputId).focus();
+    // alert("#"+ inputId);
+
+
+    // $("#Input-2020-7-9-9AM").attr("readonly",false);
+    // alert($(this).data().id);
+    // alert("unlock clicked");
+}
+//trying
+// $(".unlockAndSaveBtn").off().on("click",function(e){
+//     e.stopPropagation();
+//     alert("unlock"); 
 // });

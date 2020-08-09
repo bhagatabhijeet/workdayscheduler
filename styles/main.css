@@ -275,7 +275,7 @@ footer{
    /* border-left:1px solid rgb(125, 126, 124);  */
    margin-left:2px;
    background-color: transparent;
-   font-size: 12px;
+   font-size: 14px;
    /* margin:5px; */
 }
 
@@ -338,6 +338,22 @@ footer{
     background-color: aquamarine;
     position: relative;
     top:10%;
+}
+.messagediv{
+    /* height: 40px; */
+    width:200px;
+}
+#message{
+    position: absolute;
+    background-color: red;
+    color:beige;
+    top:50%;    
+    z-index: 1;
+    padding:2px; 
+    width:70%;
+    margin-left:auto;
+    margin-right: auto;   
+    display: none;
 }
 
 @media only screen and (max-width:280px){
