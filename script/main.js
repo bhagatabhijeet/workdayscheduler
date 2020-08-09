@@ -289,6 +289,7 @@ function checkboxClicked() {
 }
 
 function unlockButtonClicked() {
+    $(this).blur();
     let targetId = $(this).attr("id");
     let targetDataId = $(this).data().id;
     let ValueArray = targetDataId.split("-");
@@ -306,7 +307,7 @@ function unlockButtonClicked() {
     // if (moment().isAfter(moment(stringTargetHourAfterId, "YYYY-MM-DD hh:mm"))) {
         // if(moment(stringTargetId,"YYYY-MM-DD hh:mm").isBefore(moment())){
         // alert("event in past cannot be edited");
-        $("#message").fadeIn(1000);
+        $("#message").fadeIn(100);
         $("#message").text("Cannot edit event in the past.You can only mark the event complete.");
 
         $("#message").fadeOut(4000);
