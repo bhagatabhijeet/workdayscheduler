@@ -314,7 +314,7 @@ function unlockButtonClicked() {
         return;
     }
     let inputId = targetId.replace("UnlockBtn", "Input");
-
+    $(this).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
     $("#" + inputId).attr("readonly", false);
     $("#" + inputId).focus();
     // alert("#"+ inputId);
