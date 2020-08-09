@@ -2,6 +2,8 @@ let now = moment();
 let currentSelectedYear; //gives a number
 let currentSelectedMonth; //gives a number
 
+let calendarVisible = false;
+
 // let firstDayOfSelectedMonth; //moment object
 // let lastDayOfSelectedMonth; //moment object
 
@@ -17,6 +19,7 @@ $(document).ready(function () {
     currentSelectedYear = now.year();
     setFirstLastDayOfMonth();
     displayMonth(currentSelectedMonth);
+    displayTimeSlots();
 
 
     // $("#prev").on("click",function(){
@@ -56,11 +59,13 @@ $("#prev").on("click", function () {
     setFirstLastDayOfMonth();
     displayMonth(currentSelectedMonth);
     if((currentSelectedMonth + "-" + currentSelectedYear) !== (moment().month()+"-"+moment().year())){
-        $("#backToTodaydiv").css("display","block");
+        $("#backToTodaydiv").css("visibility","visible");
     }
     else{
-        $("#backToTodaydiv").css("display","none");
+        $("#backToTodaydiv").css("visibility","hidden");
     }
+
+    displayTimeSlots();
 
 });
 
@@ -77,50 +82,77 @@ $("#next").on("click", function () {
     setFirstLastDayOfMonth();   
     displayMonth(currentSelectedMonth);
     if((currentSelectedMonth + "-" + currentSelectedYear) !== (moment().month()+"-"+moment().year())){
-        $("#backToTodaydiv").css("display","block");
+        $("#backToTodaydiv").css("visibility","visible");
     }
     else{
-        $("#backToTodaydiv").css("display","none");
+        $("#backToTodaydiv").css("visibility","hidden");
     }
+
+    displayTimeSlots();
 
 });
 
 $("#showHideBtn").on("click",function(){
-   if($("#prev").css("visibility") ==="visible"){
-    $("#prev").css("visibility","hidden") ;
-   }
-   else{
-    $("#prev").css("visibility","visible");
-   }
-   if($("#next").css("visibility") ==="visible"){
-    $("#next").css("visibility","hidden") ;
-   }
-   else{
-    $("#next").css("visibility","visible");
-   }
-   
-   if($(".calcontainer").css("display") ==="flex"){
-    $(".calcontainer").css("display","none") ;
-   }
-   else{
-    $(".calcontainer").css("display","flex");
-   }
-
-   if($("#backToTodaydiv").css("visibility") ==="visible"){
-    $("#backToTodaydiv").css("visibility","hidden") ;
-   }
-   else{
-    $("#backToTodaydiv").css("visibility","visible");
-   }
-
-
-   
+    if(calendarVisible === false){
+        $("#prev").css("visibility","visible");
+        $("#next").css("visibility","visible");
+        $(".calcontainer").css("display","flex");
+        $("#showHideBtn").html('<i class="fa fa-chevron-circle-up" aria-hidden="true"></i>');
+        $("#showHideText").text("Hide Calendar : ");
+        calendarVisible=true;
+    }
+    else{
+        $("#prev").css("visibility","hidden");
+        $("#next").css("visibility","hidden");
+        $(".calcontainer").css("display","none");
+        $("#showHideBtn").html('<i class="fa fa-chevron-circle-down" aria-hidden="true"></i></button>');
+        $("#showHideText").text("Show Calendar : ");
+        calendarVisible=false;
+    }   
 });
 
-// $("#next").on("click",function(){
-//     $("#imgcal").attr("src","https://unsplash.it/200/200");
-//  });
+function displayTimeSlots(){
+    let timeslotArr =["9:AM","10:AM","11:AM","12:PM","1:PM","2:PM","3:PM","4:PM","5:PM"]
+    $(".timeSlotsContainer").empty();
+    timeslotArr.forEach(function(tSlot){
+        let $timeslotDiv=$("<div>");
+        $timeslotDiv.addClass("timeSlotDiv");
 
+        let $timeSlotLabel = $("<label>");
+        $timeSlotLabel.addClass("timeSlotLabel");
+
+        let $timeSlotItemText = $("<span>");
+        $timeSlotItemText.addClass("timeSlotItemText");
+        let $timeSlotItemBtns = $("<span>");
+        //Add label
+        $timeSlotLabel.html(tSlot.split(":")[0] + "<sup><u>" + tSlot.split(":")[1] + "</u></sup>");
+        //Add input to TimeSlotItemText
+        $inputItem = $("<input type='text'>");
+        $inputItem.addClass("inputItemText");
+
+        $timeSlotItemText.append($inputItem);
+
+        $timeslotDiv.append($timeSlotLabel);
+        $timeslotDiv.append($timeSlotItemText);
+        $timeslotDiv.append($timeSlotItemBtns);
+
+        $(".timeSlotsContainer").append($timeslotDiv);
+    });
+    // for(let i=0;i<9;i++){
+    //     let $timeslotDiv=$("<div>");
+    //     $timeslotDiv.addClass("timeSlotDiv");
+    //     let $timeSlotLabel = $("<span>");
+    //     let $timeSlotItemText = $("<span>");
+    //     let $timeSlotItemBtns = $("<span>");
+
+    //     $timeSlotLabel.html(timeslotArr[])
+    //     $timeslotDiv.append($timeSlotLabel);
+    //     $timeslotDiv.append($timeSlotItemText);
+    //     $timeslotDiv.append($timeSlotItemBtns);
+
+    //     $(".timeSlotsContainer").append($timeslotDiv);
+    // }
+}
 
 function displayMonth(selectedMonth) {
     const MonthsArr = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -155,26 +187,26 @@ function displayMonth(selectedMonth) {
     }
     // today=moment().format("YYYY-MM-dd");
     $today=$("button[data-id='"+ moment().year()+"-"+ moment().month() + "-" + moment().date() +"']");
-    $today.css("background-color","white") ;
+    $today.css("background-color","black") ;
     $today.css("border","1px #e2b37b solid") ;
 
 }
 
 
 
-function displayYear() {
-    const MonthsArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    // MonthsArr.forEach(function(mon){
-    let ySpan = $('<span>');
-    let yr = parseInt(moment().year());
-    // alert(moment().month());
-    ySpan.text(yr);
-    ySpan.css("width", "60px");
-    // ySpan.css("margin-right","5px");
-    ySpan.addClass("monthbtn");
-    ySpan.insertAfter("#prevYearBtn");
+// function displayYear() {
+//     const MonthsArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+//     // MonthsArr.forEach(function(mon){
+//     let ySpan = $('<span>');
+//     let yr = parseInt(moment().year());
+//     // alert(moment().month());
+//     ySpan.text(yr);
+//     ySpan.css("width", "60px");
+//     // ySpan.css("margin-right","5px");
+//     ySpan.addClass("monthbtn");
+//     ySpan.insertAfter("#prevYearBtn");
 
-    // $(".monthcontainer").inser("#prevMonthBtn").append(mBtn);
-    // });
+//     // $(".monthcontainer").inser("#prevMonthBtn").append(mBtn);
+//     // });
 
-}
+// }

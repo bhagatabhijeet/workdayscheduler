@@ -31,24 +31,24 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="row">
-                    <div class="col">
+                    <div class="col justify-content-space-evenly">
                         <div class="row justify-content-center">
                             <img id="imgcal" src="https://unsplash.it/200/200" />
                         </div>
-                        <div id="showHidediv" class="justify-content-center"><button id="showHideBtn">Show/Hide Calendar</button></div>
+                        <div id="showHidediv">
+                            <span id="showHideText">Show Calendar : </span>
+                            <button id="showHideBtn"><i class="fa fa-chevron-circle-down" aria-hidden="true"></i></button></div>
                         <div class="row justify-content-center">
                             <div class="monthrow">
                                 <button id="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
                                 <span id="monthName">August</span>,
                                 <span id="yearName">2020</span>
                                 <button id="next"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
-                            </div>                            
+                            </div>
                         </div>
-                        <div id="backToTodaydiv"><button id="backToToday">Back to today</button></div>
                     </div>
                 </div>
                 
-                <!-- <hr/> -->
                 <div class="row calcontainer">
                     <div class="col-sm-1" id="day0"><label class="daylabel">Sun</label></div>
                     <div class="col-sm-1" id="day1"><label class="daylabel">Mon</label></div>
@@ -58,50 +58,18 @@
                     <div class="col-sm-1" id="day5"><label class="daylabel">Fri</label></div>
                     <div class="col-sm-1" id="day6"><label class="daylabel">Sat</label></div>
                 </div>
-                <div class="row"></div>
-
-                <!-- <div class="calendar">
-                <div class="month">      
-                    <ul>
-                      <li class="prev">&#10094;</li>
-                      <li class="next">&#10095;</li>
-                      <li>
-                        August<br>
-                        <span style="font-size:18px">2017</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <ul class="weekdays">
-                    <li>Mo</li>
-                    <li>Tu</li>
-                    <li>We</li>
-                    <li>Th</li>
-                    <li>Fr</li>
-                    <li>Sa</li>
-                    <li>Su</li>
-                  </ul>
-            </div> -->
-               
+                <hr style="border-top: 2px solid green;"/>
+                
             </div>
             <div class="col-lg-7">
-                TEST
+                <div id="backToTodaydiv"><button id="backToToday">Back to today</button></div>
+                <div id="selectedDay">TO BE DONE</div>
+                <div class="timeSlotsContainer">
+
+                </div>
             </div>
         </div>
-
-        <!-- <div class="calendars">
-            <div class="week"></div>
-
-            <div class="yearcontainer">
-                <button id="prevYearBtn" class ="monthbtn"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
-                <button id="nextYearBtn" class ="monthbtn"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
-            </div>
-            <div class="monthcontainer">
-                <button id="prevMonthBtn" class ="monthbtn"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
-                <button id="nextMonthBtn" class ="monthbtn"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
-            </div>
-
-        </div>
-        <div id="message"></div> -->
+        <!-- container end -->
     </div>
     <footer>
         Abhijeet Bhagat
@@ -110,6 +78,7 @@
         <hr class="wire" />
         <img id="left-light" src="images/left-light.png" />
     </div>
+    <div style="height: 100px;"></div> <!-- hack-->
     <img id="bottom-right-plant" src="images/plant-right.png" />
     <img id="bottom-left-plant" src="images/plant-left.png" />
 
