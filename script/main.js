@@ -129,6 +129,7 @@ function displayTimeSlots() {
         //Add input to TimeSlotItemText
         $inputItem = $("<input type='text'>");
         $inputItem.addClass("inputItemText");
+        $inputItem.attr("readonly","true");
 
         $timeSlotItemText.append($inputItem);
 
