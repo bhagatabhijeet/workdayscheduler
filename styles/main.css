@@ -141,6 +141,10 @@ footer{
     border-radius: 50%;
     border:none;
     color:whitesmoke;
+    width:32px;
+    height:32px;
+    margin:1px;
+    outline: none;
 }
 .daybtn:disabled{
     background-color: gray;
@@ -152,31 +156,40 @@ footer{
     height:35px;
     margin:1px;
 }
-.daybtn{
-    width:25px;
-    height:25px;
+/* .daybtn{
+    width:10px;
+    height:10px;
     margin:1px;
+} */
+
+#showHideBtn{
+    background-color:#e2b37b;
+    width:30px;
+    height:30px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
 }
 
 #backToTodaydiv,#showHidediv{
     margin-left: auto;
     margin-right: auto; 
-    width:120px;
+    color:#486d12;
+    font-weight: 600;
+    /* width:120px; */
    
    
 }
-#backToTodaydiv{
-    visibility: hidden;
-}
+
 #showHidediv{
     display: block;
     width:180px;
     text-align: center;
 }
 #backToToday{
-    background-color: #486d12;
-    color: whitesmoke;
-    border-radius:20%;    
+    background-color: #e2b37b;
+    color: brown;
+    border-radius:8%;    
 }
   
 #imgcal{   
@@ -186,9 +199,9 @@ footer{
 #prev,#next,#monthName,#yearName{
     font-size: 15px;
     /* margin:5px; */
-    color:#503009;
+    color:#486d12;
     font-weight: 400;
-    background-color: #e2b37b;
+    /* background-color: #486d12; */
 
     
 }
@@ -196,11 +209,16 @@ footer{
     visibility: hidden;
     border:none;
     border-radius: 50%;
+    background-color: #486d12;
+    color:whitesmoke;
+    width:30px;
+    height: 30px;
+    outline: none;
 }
 
 .monthrow{
-    background-color: #e2b37b;
-    border: 1px solid;
+    background-color: transparent;
+    /* border: 1px solid; */
     margin-top: 10px;
     /* padding:5px; */
     /* border-radius: 5px; */
@@ -234,6 +252,7 @@ footer{
     margin-left:2px;
 }
 
+
 .inputItemText{
     height: 47px;
     width:99%; 
@@ -253,6 +272,21 @@ footer{
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;
     border-radius: 0px !important; */
+}
+
+#selectedDay,.selectedDayDiv{
+    font-size: 15px;
+    font-weight: 600;
+    margin-right: 20px;
+    color:#ebdac6;
+    background-color: #486d12;
+    text-align: center;
+}
+.selectedDayDiv
+{
+    border:1px solid black;
+    border-radius: 5px;
+    color:white;
 }
 
 @media only screen and (max-width:280px){
