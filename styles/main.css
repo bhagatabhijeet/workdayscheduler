@@ -238,6 +238,11 @@ footer{
     height: 50px;
     border:1px solid rgb(125, 126, 124);
     border-left: none;
+    border-right:none;
+    /* background-color: #1181bd; */
+    position: relative;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .timeSlotLabel{
@@ -247,12 +252,15 @@ footer{
    margin:0px;
    font-size: 15px;
    font-weight: 600;
+   /* background-color: whitesmoke; */
+   position: relative;
+   top:0px;
 }
 
 .timeSlotItemText{
     background-color: gray;
     height: 47px;
-    width:75%; 
+    width:80%; 
     /* border:none; */
     display: inline-block;
     margin-left:2px;
@@ -261,12 +269,13 @@ footer{
 
 .inputItemText{
     height: 47px;
-    width:90%; 
+    width:80%; 
     border:none;
     /* outline: none; */
    /* border-left:1px solid rgb(125, 126, 124);  */
    margin-left:2px;
    background-color: transparent;
+   font-size: 12px;
    /* margin:5px; */
 }
 
@@ -293,6 +302,42 @@ footer{
     border:1px solid black;
     border-radius: 5px;
     color:white;
+}
+
+.unlockAndSaveBtn{
+    width:30px;
+    height:30px;
+    margin-left:10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    position: absolute;
+    top:8px;
+    left:5%;
+}
+
+.timeSlotItemBtnsSpan{
+    background-color: #1181bd;
+    height:47px;
+    width:15%;
+    /* margin-left: 70%; */
+    /* margin-right:auto; */
+    display: inline-block;
+    position: absolute;
+    top:0%;
+    left:85%;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+
+    /* margin:0% 70%; */
+}
+
+.inputItemCheck{
+    width: 20px;
+    height:20px;
+    margin-left:2%;
+    background-color: aquamarine;
+    position: relative;
+    top:10%;
 }
 
 @media only screen and (max-width:280px){

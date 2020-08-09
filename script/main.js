@@ -124,23 +124,42 @@ function displayTimeSlots() {
         let $timeSlotItemText = $("<span>");
         $timeSlotItemText.addClass("timeSlotItemText");
         let $timeSlotItemBtns = $("<span>");
+        $timeSlotItemBtns.addClass("timeSlotItemBtnsSpan");
         //Add label
         $timeSlotLabel.html(tSlot.split(":")[0] + "<sup><u>" + tSlot.split(":")[1] + "</u></sup>");
         //Add input to TimeSlotItemText
         $inputItem = $("<input type='text'>");
         $inputItem.addClass("inputItemText");
-        $inputItem.attr("readonly","true");
-
+        // $inputItem.attr("readonly","true");
+        //Add checkbox to TimeSlotItemText
         $inputItemCheck = $("<input type='checkbox'>");
+        $inputItemCheck.addClass("inputItemCheck");
+        $inputItemCheck.on("click",checkboxClicked);
+
+        $unlockAndSaveBtn = $("<button>");
+        $unlockAndSaveBtn.addClass("unlockAndSaveBtn");
+        $unlockAndSaveBtn.html('<i class="fa fa-lock" aria-hidden="true"></i>')
 
         $timeSlotItemText.append($inputItem);
         $timeSlotItemText.append($inputItemCheck);
+
+        $timeSlotItemBtns.append($unlockAndSaveBtn);
 
         $timeslotDiv.append($timeSlotLabel);
         $timeslotDiv.append($timeSlotItemText);
         $timeslotDiv.append($timeSlotItemBtns);
 
         $(".timeSlotsContainer").append($timeslotDiv);
+//trying
+        $(".unlockAndSaveBtn").on("click",function(e){
+            e.stopPropagation();
+            alert("unlock");
+            // let btnDataArr=$(this).data("id").split("-");
+            
+            // $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1])+1}-${btnDataArr[2]}`);
+            // console.log($(this));
+            // alert(event.target.id);
+        });
     });
 }
 
@@ -212,3 +231,26 @@ $(".calcontainer").on("click","button",function(){
     // console.log($(this));
     // alert(event.target.id);
 });
+
+
+
+// $(".inputItemCheck").on("click",function(){
+//     alert("checkbox clicked");
+// });
+
+function checkboxClicked(){
+    alert("checkbox clicked");
+    $(this).prev().css("text-decoration","line-through");
+
+}
+
+
+// $(".timeSlotItemBtnsSpan").on("click","button.unlockAndSaveBtn",function(){
+
+//     alert("unlock");
+//     // let btnDataArr=$(this).data("id").split("-");
+    
+//     // $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1])+1}-${btnDataArr[2]}`);
+//     // console.log($(this));
+//     // alert(event.target.id);
+// });
