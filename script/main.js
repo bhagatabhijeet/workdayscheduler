@@ -131,7 +131,10 @@ function displayTimeSlots() {
         $inputItem.addClass("inputItemText");
         $inputItem.attr("readonly","true");
 
+        $inputItemCheck = $("<input type='checkbox'>");
+
         $timeSlotItemText.append($inputItem);
+        $timeSlotItemText.append($inputItemCheck);
 
         $timeslotDiv.append($timeSlotLabel);
         $timeslotDiv.append($timeSlotItemText);
