@@ -68,7 +68,7 @@ header{
     font-size: large;
     text-align: right;
     font-weight: 600;
-    text-decoration: underline;
+    /* text-decoration: underline; */
     color:#486d12;
     margin-top: 50px;
 }
@@ -113,12 +113,18 @@ header{
     border-left: 2px solid black;
 }
 
+a:link,a:visited{
+    color:#486d12;
+}
+
 footer{
     height: 30px;
     width: 100%;   
     position: fixed;
     bottom: 0;
    text-align: center;
+   color:#486d12;
+   font-weight: 500;
 }
 
 .calcontainer{
@@ -188,7 +194,7 @@ footer{
 }
 #backToToday{
     background-color: #e2b37b;
-    color: brown;
+    color: #2a4205;
     border-radius:8%;    
 }
   
