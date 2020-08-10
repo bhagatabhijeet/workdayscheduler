@@ -171,6 +171,8 @@ function displayTimeSlots() {
         $inputItem.attr("id", "Input-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
         $inputItem.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
         $inputItem.attr("readonly", "true");
+        $inputItem.on("input",inputItemChanged);
+
         //Add checkbox to TimeSlotItemText
         $inputItemCheck = $("<input type='checkbox'>");
         $inputItemCheck.addClass("inputItemCheck");
@@ -188,7 +190,10 @@ function displayTimeSlots() {
         $unlockAndSaveBtn.attr("id", "UnlockBtn-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
         $unlockAndSaveBtn.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
 
-        $unlockAndSaveBtn.html('<i class="fa fa-lock" aria-hidden="true"></i>')
+        //Give special attribute named 'btnState to the button. btnState will be in locked,unlocked and Save states
+        $unlockAndSaveBtn.attr("btnState","locked");
+
+        $unlockAndSaveBtn.html('<i class="fa fa-lock" aria-hidden="true"></i>');
         $unlockAndSaveBtn.on("click", unlockButtonClicked);
 
         $timeSlotItemText.append($inputItem);
@@ -273,7 +278,7 @@ $(".calcontainer").on("click", "button", function () {
     now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
     setFirstLastDayOfMonth();
     displayTimeSlots();
-    displayHTMLMessage(`<span><i class="fa fa-check" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`,"green");
+    displayHTMLMessage(`<i class="fa fa-dot-circle-o" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`,"green");
     
 
     // $("#message").css("background-color","green")
@@ -303,38 +308,57 @@ function unlockButtonClicked() {
     let targetDataId = $(this).data().id;
     let ValueArray = targetDataId.split("-");
     let stringTargetId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2];
-    let stringTargetHourAfterId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2].split(" ")[0] + " " + (parseInt(ValueArray[2].split(" ")[1]) + 1);
+    // let stringTargetHourAfterId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2].split(" ")[0] + " " + (parseInt(ValueArray[2].split(" ")[1]) + 1);
 
+    let inputId = targetId.replace("UnlockBtn", "Input");
 
-    console.log(stringTargetId);
-    console.log(ValueArray[2]);
-    console.log(stringTargetHourAfterId);
+    // console.log(stringTargetId);
+    // console.log(ValueArray[2]);
+    // console.log(stringTargetHourAfterId);
     let m1 = moment(stringTargetId, "YYYY-MM-DD hh:mm");
     let m2 = m1.clone();
     m2.add(1,'h');
-    if(moment().isAfter(m2)){
-    // if (moment().isAfter(moment(stringTargetHourAfterId, "YYYY-MM-DD hh:mm"))) {
-        // if(moment(stringTargetId,"YYYY-MM-DD hh:mm").isBefore(moment())){
-        // alert("event in past cannot be edited");
-        // $("#message").fadeIn(100);
-        // $("#message").text("Cannot edit event in the past.You can only mark the event complete.");
+    if($(this).attr("btnState") === "unlocked"){ 
+        return;
+    }
 
-        // $("#message").fadeOut(4000);
+    if($(this).attr("btnState") === "locked"){ 
+    if(moment().isAfter(m2)){
+   
         displayMessage("Cannot edit event in the past.You can only mark the event complete.","red",100,4000);
         return;
     }
-    unlockedButtonId =$(this).attr("id");
-    
-    let inputId = targetId.replace("UnlockBtn", "Input");
-    $(this).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
-    $("#" + inputId).attr("readonly", false);
-    $("#" + inputId).focus();
-    // alert("#"+ inputId);
+   
 
+        unlockedButtonId =$(this).attr("id");
+        
+        $(this).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
+        $("#" + inputId).attr("readonly", false);
+        $("#" + inputId).focus();
+        $(this).attr("btnState","unlocked"); 
+    }  
+    if($(this).attr("btnState") === "save"){ 
+        displayHTMLMessage('<span><i class="fa fa-spinner" aria-hidden="true"></i>Saving...</span>',"blue");
+        //save to local storage here
+        $(this).attr("btnState","locked");
+        $(this).html('<i class="fa fa-lock" aria-hidden="true"></i>')
+        $("#" + inputId).attr("readonly", true);
+    } 
+}
 
-    // $("#Input-2020-7-9-9AM").attr("readonly",false);
-    // alert($(this).data().id);
-    // alert("unlock clicked");
+function inputItemChanged(){
+    // alert("change : " + $(this).val().trim() );
+    let targetId,btnTarget;
+    targetId =  $(this).attr("id");
+    btnTarget = targetId.replace("Input","UnlockBtn");
+    if($(this).val().trim() !== ""){
+    $("#"+btnTarget).html('<i class="fa fa-floppy-o" aria-hidden="true"></i>');
+    $("#"+btnTarget).attr("btnState","save");  
+    }
+    else{
+        $("#"+btnTarget).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
+        $("#"+btnTarget).attr("btnState","unlocked");
+    }
 }
 
 function displayMessage(msg,color,fadeInTime,fadeOutTime){
