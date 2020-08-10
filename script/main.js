@@ -232,6 +232,15 @@ function fetchAndShowItemText(intputItemsIdArray) {
             if (Items.length !== 0) {
                 let item = Items[0];
                 $("#Input-" + item.id).val(item.text);
+
+                if (item.isComplete) {
+                    $("#Input-" + item.id).css("text-decoration", "line-through");
+                    $("#Check-" + item.id).prop("checked",true);
+                }
+                else {
+                    $("#Input-" + item.id).css("text-decoration", "none");
+                    $("#Check-" + item.id).prop("checked",false);
+                }
             }
         }
     }
@@ -303,7 +312,7 @@ $(".calcontainer").on("click", "button", function () {
     let btnDataArr = $(this).data("id").split("-");
 
     $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
-    now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`,"YYYY-MM-DD hh:mm A");
+    now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`, "YYYY-MM-DD hh:mm A");
     setFirstLastDayOfMonth();
     displayTimeSlots();
     displayHTMLMessage(`<i class="fa fa-dot-circle-o" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`, "green");
@@ -325,8 +334,48 @@ $(".calcontainer").on("click", "button", function () {
 // });
 
 function checkboxClicked() {
-    alert("checkbox clicked");
-    // $(this).prev().css("text-decoration","line-through");
+    let targetId = $(this).attr("id");
+    if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
+        wordaySchedulerStorageObject = {
+            items: []
+        };
+
+        localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
+        $("#" + targetId).prop("checked", false);
+        return;
+    }
+
+    // let storageItem = {
+    //     id: targetId.replace("Check-", ""),
+    //     text: $("#" + targetId.replace("Check-", "Input-")).val(),
+    //     isComplete: $(this).prop("checked"),
+    // };
+    // if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
+    //     wordaySchedulerStorageObject = {
+    //         items: []
+    //     };
+    //     wordaySchedulerStorageObject.items.push(storageItem);
+    //     localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
+    // }
+    // else {
+    wordaySchedulerStorageObject = JSON.parse(localStorage.getItem("wordaySchedulerStorageObject"));
+    let index = wordaySchedulerStorageObject.items.findIndex(e => e.id === targetId.replace("Check-", ""));//storageItem.id);
+    if (index !== -1) {
+        // wordaySchedulerStorageObject.items[index] = storageItem;
+        wordaySchedulerStorageObject.items[index].isComplete=$(this).prop("checked");
+    }
+    else {
+        // wordaySchedulerStorageObject.items.push(storageItem);
+        $(this).prop("checked", false);
+    }
+    localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
+    // }
+    if ($(this).prop("checked")) {
+        $("#" + targetId.replace("Check-", "Input-")).css("text-decoration", "line-through");
+    }
+    else {
+        $("#" + targetId.replace("Check-", "Input-")).css("text-decoration", "none");
+    }
 
 }
 
@@ -347,6 +396,9 @@ function unlockButtonClicked() {
     let m2 = m1.clone();
     m2.add(1, 'h');
     if ($(this).attr("btnState") === "unlocked") {
+        $("#" + inputId).attr("readonly", true);
+        $(this).html('<i class="fa fa-lock" aria-hidden="true"></i>')
+        $(this).attr("btnState", "locked");
         return;
     }
 
@@ -371,7 +423,7 @@ function unlockButtonClicked() {
         let storageItem = {
             id: targetId.replace("UnlockBtn-", ""),
             text: $("#" + inputId).val(),
-            isComplete: false
+            isComplete: $("#" + targetId.replace("UnlockBtn", "Check")).prop("checked"),
         };
         if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
             wordaySchedulerStorageObject = {
