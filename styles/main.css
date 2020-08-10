@@ -134,8 +134,7 @@ footer{
     border: 1px solid gray;
     align-content: center;
     padding-right: 10px;
-    border-radius: 10%;
-    display: none;
+    border-radius: 10%;    
     margin-top: 10px;
 }
 
@@ -212,7 +211,7 @@ footer{
     
 }
 #prev,#next{
-    visibility: hidden;
+    visibility: visible;
     border:none;
     border-radius: 50%;
     background-color: #486d12;

@@ -2,7 +2,7 @@ let now = moment();
 let currentSelectedYear; //gives a number
 let currentSelectedMonth; //gives a number
 
-let calendarVisible = false;
+let calendarVisible = true;
 let wordaySchedulerStorageObject;
 // let unlockedButtonId;
 
@@ -100,7 +100,7 @@ $("#showHideBtn").on("click", function () {
         $("#next").css("visibility", "visible");
         $(".calcontainer").css("display", "flex");
         $("#showHideBtn").html('<i class="fa fa-chevron-circle-up" aria-hidden="true"></i>');
-        $("#showHideText").text("Hide Calendar : ");
+        $("#showHideText").text("Click to hide calendar : ");
         calendarVisible = true;
     }
     else {
@@ -108,7 +108,7 @@ $("#showHideBtn").on("click", function () {
         $("#next").css("visibility", "hidden");
         $(".calcontainer").css("display", "none");
         $("#showHideBtn").html('<i class="fa fa-chevron-circle-down" aria-hidden="true"></i></button>');
-        $("#showHideText").text("Show Calendar : ");
+        $("#showHideText").text("Click to show calendar : ");
         calendarVisible = false;
     }
 });
