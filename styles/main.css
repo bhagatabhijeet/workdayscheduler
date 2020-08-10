@@ -357,13 +357,14 @@ footer{
     position: absolute;
     background-color: red;
     color:beige;
-    top:50%;    
+    top:30%;    
     z-index: 1;
     padding:2px; 
     width:70%;
     margin-left:auto;
     margin-right: auto;   
     display: none;
+    text-align: center;
 }
 
 ul li {
@@ -404,11 +405,11 @@ border: 1px solid black;
     border-radius: 50%;
 }
 
-@media only screen and (max-width:280px){
+/* @media only screen and (max-width:280px){
     .image-calendar{
         display: none;
     }
-}
+} */
 
 @media only screen and (max-width:767px){
     body{
@@ -439,6 +440,20 @@ border: 1px solid black;
         left:-1%;
         bottom:-1%;
         height: 75px;
+    }
+
+    #message{
+        position: fixed;
+        background-color: red;
+        color:beige;
+        top:30%;    
+        z-index: 1;
+        padding:2px; 
+        width:70%;
+        margin-left:auto;
+        margin-right: auto;   
+        display: none;
+        text-align: center;
     }
 
 }

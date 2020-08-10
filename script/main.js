@@ -3,6 +3,7 @@ let currentSelectedYear; //gives a number
 let currentSelectedMonth; //gives a number
 
 let calendarVisible = false;
+let unlockedButtonId;
 
 // let firstDayOfSelectedMonth; //moment object
 // let lastDayOfSelectedMonth; //moment object
@@ -271,9 +272,17 @@ $(".calcontainer").on("click", "button", function () {
     $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
     now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
     setFirstLastDayOfMonth();
-    displayTimeSlots()
-    // console.log($(this));
-    // alert(event.target.id);
+    displayTimeSlots();
+    displayHTMLMessage(`<span><i class="fa fa-check" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`,"green");
+    
+
+    // $("#message").css("background-color","green")
+    // $("#message").fadeIn(100);
+
+    // $("#message").text("Selected.");
+
+    // $("#message").fadeOut(4000);
+    
 });
 
 
@@ -307,12 +316,15 @@ function unlockButtonClicked() {
     // if (moment().isAfter(moment(stringTargetHourAfterId, "YYYY-MM-DD hh:mm"))) {
         // if(moment(stringTargetId,"YYYY-MM-DD hh:mm").isBefore(moment())){
         // alert("event in past cannot be edited");
-        $("#message").fadeIn(100);
-        $("#message").text("Cannot edit event in the past.You can only mark the event complete.");
+        // $("#message").fadeIn(100);
+        // $("#message").text("Cannot edit event in the past.You can only mark the event complete.");
 
-        $("#message").fadeOut(4000);
+        // $("#message").fadeOut(4000);
+        displayMessage("Cannot edit event in the past.You can only mark the event complete.","red",100,4000);
         return;
     }
+    unlockedButtonId =$(this).attr("id");
+    
     let inputId = targetId.replace("UnlockBtn", "Input");
     $(this).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
     $("#" + inputId).attr("readonly", false);
@@ -324,8 +336,40 @@ function unlockButtonClicked() {
     // alert($(this).data().id);
     // alert("unlock clicked");
 }
-//trying
-// $(".unlockAndSaveBtn").off().on("click",function(e){
-//     e.stopPropagation();
-//     alert("unlock"); 
-// });
+
+function displayMessage(msg,color,fadeInTime,fadeOutTime){
+    if(color === undefined){
+        color="red";
+    }
+    if(fadeInTime === undefined){
+        fadeInTime=100;
+    }
+    if(fadeOutTime === undefined){
+        fadeOutTime=2000;
+    }
+    $("#message").css("background-color",color)
+    $("#message").fadeIn(fadeInTime);
+    $("#message").text(msg);
+    $("#message").fadeOut(fadeOutTime).delay(200);
+    //reset back to red color
+    // $("#message").delay(fadeOutTime).css("background-color","red");
+}
+
+function displayHTMLMessage(msg,color,fadeInTime,fadeOutTime){
+    if(color === undefined){
+        color="red";
+    }
+    if(fadeInTime === undefined){
+        fadeInTime=100;
+    }
+    if(fadeOutTime === undefined){
+        fadeOutTime=2000;
+    }
+    $("#message").css("background-color",color)
+    $("#message").fadeIn(fadeInTime);
+    $("#message").html(msg);
+    $("#message").fadeOut(fadeOutTime).delay(200);
+    //reset back to red color and empty
+    // $("#message").empty();
+    // $("#message").css("background-color","red");
+}
