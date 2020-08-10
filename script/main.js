@@ -3,7 +3,8 @@ let currentSelectedYear; //gives a number
 let currentSelectedMonth; //gives a number
 
 let calendarVisible = false;
-let unlockedButtonId;
+let wordaySchedulerStorageObject;
+// let unlockedButtonId;
 
 // let firstDayOfSelectedMonth; //moment object
 // let lastDayOfSelectedMonth; //moment object
@@ -115,6 +116,7 @@ $("#showHideBtn").on("click", function () {
 function displayTimeSlots() {
     let timeLabelArr = ["9:AM", "10:AM", "11:AM", "12:PM", "1:PM", "2:PM", "3:PM", "4:PM", "5:PM"];
     let timeslotArr = ["9:AM", "10:AM", "11:AM", "12:PM", "13:PM", "14:PM", "15:PM", "16:PM", "17:PM"];
+    let intputItemsIdArray = [];
 
     $(".timeSlotsContainer").empty();
     timeslotArr.forEach(function (tSlot, index) {
@@ -139,18 +141,18 @@ function displayTimeSlots() {
         //Logic to color
         let t1 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + ValueArray[0] + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
         let t2 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + ValueArray[0] + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
-        t2.add(1,'h');
-        
+        t2.add(1, 'h');
+
         // let t2 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
         //t2=t1.add(1,'hours');
-        console.log("t1",t1);
-        console.log("t2",t2);
+        // console.log("t1",t1);
+        // console.log("t2",t2);
         if (moment().isBetween(t1, t2)) {
             $timeSlotItemText.css("background-color", "#e2b37b");
         }
         else {
-            if(moment().isAfter(t2)){
-            // if (moment().isAfter(moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A"))) {
+            if (moment().isAfter(t2)) {
+                // if (moment().isAfter(moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A"))) {
                 $timeSlotItemText.css("background-color", "#b4b4b4");
             }
             else {
@@ -171,7 +173,8 @@ function displayTimeSlots() {
         $inputItem.attr("id", "Input-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
         $inputItem.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
         $inputItem.attr("readonly", "true");
-        $inputItem.on("input",inputItemChanged);
+        $inputItem.on("input", inputItemChanged);
+        intputItemsIdArray.push(now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
 
         //Add checkbox to TimeSlotItemText
         $inputItemCheck = $("<input type='checkbox'>");
@@ -191,7 +194,7 @@ function displayTimeSlots() {
         $unlockAndSaveBtn.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
 
         //Give special attribute named 'btnState to the button. btnState will be in locked,unlocked and Save states
-        $unlockAndSaveBtn.attr("btnState","locked");
+        $unlockAndSaveBtn.attr("btnState", "locked");
 
         $unlockAndSaveBtn.html('<i class="fa fa-lock" aria-hidden="true"></i>');
         $unlockAndSaveBtn.on("click", unlockButtonClicked);
@@ -206,8 +209,33 @@ function displayTimeSlots() {
         $timeslotDiv.append($timeSlotItemBtns);
 
         $(".timeSlotsContainer").append($timeslotDiv);
-
     });
+    fetchAndShowItemText(intputItemsIdArray);
+}
+
+function fetchAndShowItemText(intputItemsIdArray) {
+    let objPointer = 0;
+    if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
+        wordaySchedulerStorageObject = {
+            items: []
+        };
+        // wordaySchedulerStorageObject.items.push(storageItem);
+        localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
+        return;
+    }
+    else {
+        wordaySchedulerStorageObject = JSON.parse(localStorage.getItem("wordaySchedulerStorageObject"));
+
+
+        for (objPointer; objPointer < intputItemsIdArray.length; objPointer++) {
+            let Items = wordaySchedulerStorageObject.items.filter(e => e.id === intputItemsIdArray[objPointer]);
+            if (Items.length !== 0) {
+                let item = Items[0];
+                $("#Input-" + item.id).val(item.text);
+            }
+        }
+    }
+
 }
 
 function displayMonth(selectedMonth) {
@@ -275,11 +303,11 @@ $(".calcontainer").on("click", "button", function () {
     let btnDataArr = $(this).data("id").split("-");
 
     $("#selectedDay").text(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
-    now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`);
+    now = moment(`${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}`,"YYYY-MM-DD hh:mm A");
     setFirstLastDayOfMonth();
     displayTimeSlots();
-    displayHTMLMessage(`<i class="fa fa-dot-circle-o" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`,"green");
-    
+    displayHTMLMessage(`<i class="fa fa-dot-circle-o" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`, "green");
+
 
     // $("#message").css("background-color","green")
     // $("#message").fadeIn(100);
@@ -287,7 +315,7 @@ $(".calcontainer").on("click", "button", function () {
     // $("#message").text("Selected.");
 
     // $("#message").fadeOut(4000);
-    
+
 });
 
 
@@ -317,61 +345,86 @@ function unlockButtonClicked() {
     // console.log(stringTargetHourAfterId);
     let m1 = moment(stringTargetId, "YYYY-MM-DD hh:mm");
     let m2 = m1.clone();
-    m2.add(1,'h');
-    if($(this).attr("btnState") === "unlocked"){ 
+    m2.add(1, 'h');
+    if ($(this).attr("btnState") === "unlocked") {
         return;
     }
 
-    if($(this).attr("btnState") === "locked"){ 
-    if(moment().isAfter(m2)){
-   
-        displayMessage("Cannot edit event in the past.You can only mark the event complete.","red",100,4000);
-        return;
-    }
-   
+    if ($(this).attr("btnState") === "locked") {
+        if (moment().isAfter(m2)) {
 
-        unlockedButtonId =$(this).attr("id");
-        
+            displayHTMLMessage('<span><i class="fa fa-ban" aria-hidden="true"></i> Cannot edit event in the past.You can only mark the event complete</span>', "red", 100, 4000);
+            return;
+        }
+
+
+        // unlockedButtonId =$(this).attr("id");
+
         $(this).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
         $("#" + inputId).attr("readonly", false);
         $("#" + inputId).focus();
-        $(this).attr("btnState","unlocked"); 
-    }  
-    if($(this).attr("btnState") === "save"){ 
-        displayHTMLMessage('<span><i class="fa fa-spinner" aria-hidden="true"></i>Saving...</span>',"blue");
-        //save to local storage here
-        $(this).attr("btnState","locked");
+        $(this).attr("btnState", "unlocked");
+    }
+    if ($(this).attr("btnState") === "save") {
+        displayHTMLMessage('<span><i class="fa fa-spinner" aria-hidden="true"></i>Saving...</span>', "blue");
+        // save to local storage here
+        let storageItem = {
+            id: targetId.replace("UnlockBtn-", ""),
+            text: $("#" + inputId).val(),
+            isComplete: false
+        };
+        if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
+            wordaySchedulerStorageObject = {
+                items: []
+            };
+            wordaySchedulerStorageObject.items.push(storageItem);
+            localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
+        }
+        else {
+            wordaySchedulerStorageObject = JSON.parse(localStorage.getItem("wordaySchedulerStorageObject"));
+            let index = wordaySchedulerStorageObject.items.findIndex(e => e.id === storageItem.id);
+            if (index !== -1) {
+                wordaySchedulerStorageObject.items[index] = storageItem;
+            }
+            else {
+                wordaySchedulerStorageObject.items.push(storageItem);
+            }
+            localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
+        }
+
+        // wordaySchedulerStorageObject.items.push(StorageItemObject);
+        $(this).attr("btnState", "locked");
         $(this).html('<i class="fa fa-lock" aria-hidden="true"></i>')
         $("#" + inputId).attr("readonly", true);
-    } 
+    }
 }
 
-function inputItemChanged(){
+function inputItemChanged() {
     // alert("change : " + $(this).val().trim() );
-    let targetId,btnTarget;
-    targetId =  $(this).attr("id");
-    btnTarget = targetId.replace("Input","UnlockBtn");
-    if($(this).val().trim() !== ""){
-    $("#"+btnTarget).html('<i class="fa fa-floppy-o" aria-hidden="true"></i>');
-    $("#"+btnTarget).attr("btnState","save");  
+    let targetId, btnTarget;
+    targetId = $(this).attr("id");
+    btnTarget = targetId.replace("Input", "UnlockBtn");
+    if ($(this).val().trim() !== "") {
+        $("#" + btnTarget).html('<i class="fa fa-floppy-o" aria-hidden="true"></i>');
+        $("#" + btnTarget).attr("btnState", "save");
     }
-    else{
-        $("#"+btnTarget).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
-        $("#"+btnTarget).attr("btnState","unlocked");
+    else {
+        $("#" + btnTarget).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
+        $("#" + btnTarget).attr("btnState", "unlocked");
     }
 }
 
-function displayMessage(msg,color,fadeInTime,fadeOutTime){
-    if(color === undefined){
-        color="red";
+function displayMessage(msg, color, fadeInTime, fadeOutTime) {
+    if (color === undefined) {
+        color = "red";
     }
-    if(fadeInTime === undefined){
-        fadeInTime=100;
+    if (fadeInTime === undefined) {
+        fadeInTime = 100;
     }
-    if(fadeOutTime === undefined){
-        fadeOutTime=2000;
+    if (fadeOutTime === undefined) {
+        fadeOutTime = 2000;
     }
-    $("#message").css("background-color",color)
+    $("#message").css("background-color", color)
     $("#message").fadeIn(fadeInTime);
     $("#message").text(msg);
     $("#message").fadeOut(fadeOutTime).delay(200);
@@ -379,17 +432,17 @@ function displayMessage(msg,color,fadeInTime,fadeOutTime){
     // $("#message").delay(fadeOutTime).css("background-color","red");
 }
 
-function displayHTMLMessage(msg,color,fadeInTime,fadeOutTime){
-    if(color === undefined){
-        color="red";
+function displayHTMLMessage(msg, color, fadeInTime, fadeOutTime) {
+    if (color === undefined) {
+        color = "red";
     }
-    if(fadeInTime === undefined){
-        fadeInTime=100;
+    if (fadeInTime === undefined) {
+        fadeInTime = 100;
     }
-    if(fadeOutTime === undefined){
-        fadeOutTime=2000;
+    if (fadeOutTime === undefined) {
+        fadeOutTime = 2000;
     }
-    $("#message").css("background-color",color)
+    $("#message").css("background-color", color)
     $("#message").fadeIn(fadeInTime);
     $("#message").html(msg);
     $("#message").fadeOut(fadeOutTime).delay(200);
