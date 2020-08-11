@@ -4,8 +4,10 @@ workdayscheduler is a simple calendar application that allows the user to save e
 # Description
 workdayscheduler is a simple calendar application that allows the user to save events for each hour of the day.
 
-# Screenshot
+# Screenshot & Demo
 <img src="images/full_browser.png"/>
+
+![Demo Gif](images/Workday_Scheduler_demo-min.gif)
 
 # Author and Deployment Details
 
