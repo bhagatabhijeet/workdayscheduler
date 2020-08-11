@@ -6,9 +6,9 @@ workdayscheduler is a simple calendar application that allows the user to save e
 
 # Screenshot & Demo
 <img src="images/full_browser.png"/>
-
-![Demo Gif](images/Workday_Scheduler_demo-min.gif)
-
+<div align="center">
+<img src="images/Workday_Scheduler_demo-min.gif"/>
+</div>
 # Author and Deployment Details
 
 | 1 | GitHub Repo  | https://github.com/bhagatabhijeet/workdayscheduler |
