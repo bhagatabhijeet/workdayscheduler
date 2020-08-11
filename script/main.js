@@ -1,61 +1,57 @@
+/**
+ * main.js
+ * @author Abhijeet Bhagat
+ * @description main.js is the main logic script for WorkDayScheduler.
+ */
+
+//Create a moment object at the page load
 let now = moment();
-let currentSelectedYear; //gives a number
-let currentSelectedMonth; //gives a number
 
+// ********* variables to store the currentSelected Year and Month
+let currentSelectedYear; 
+let currentSelectedMonth; 
+//***************
+
+//calendar show hide is driven using the calendarVisible global variable.
 let calendarVisible = true;
+
+//This object is used to parse the localStorage
 let wordaySchedulerStorageObject;
-// let unlockedButtonId;
 
-// let firstDayOfSelectedMonth; //moment object
-// let lastDayOfSelectedMonth; //moment object
-
-// currentYear = today.year();
-// currentMonth = today.month();
-
+// Action begins here :)
 $(document).ready(function () {
-    // $("#imgcal").attr("src","https://unsplash.it/300/200");
     $(".wire").animate({ "height": "400px" }, 2000);
-    // $("#imgcal").attr("src","https://unsplash.it/300/200");
     $(".today").text("Today is : " + now.format("ddd, MMM Do YYYY"));
     currentSelectedMonth = now.month();
     currentSelectedYear = now.year();
+    //set the First and Last day of Month
     setFirstLastDayOfMonth();
+
+    //Display the calendar
     displayMonth(currentSelectedMonth);
+
+    //Display the time slots
     displayTimeSlots();
+
+    //set the selected day text on the screen
     $("#selectedDay").text(`${now.year()}-${parseInt(now.month()) + 1}-${now.date()}`);
-
-    // $("#prev").on("click",function(){
-    //     $("#imgcal").attr("src","https://unsplash.it/200/200");
-    //  });
-
-    //  $("#next").on("click",function(){
-    //      $("#imgcal").attr("src","https://unsplash.it/200/200");
-    //   });
-
-    // $(".week").text(today.startOf('week'));
-    // displayMonth();
-    // alert(currentYear);
-    // displayYear();
-    // alert(moment().format("MMMM"));
-
-
-
 });
 
-function setFirstLastDayOfMonth() {
-    // firstDayOfSelectedMonth = now.startOf('month');  
-    // lastDayOfSelectedMonth = now.endOf('month');  
+
+/**
+ * @description function to set the first and last day of selected month. This is a util function and is used internally.
+ */
+function setFirstLastDayOfMonth() {      
     currentSelectedMonth = now.month();
     currentSelectedYear = now.year();
 }
 
+
+// Go to Previous month
 $("#prev").on("click", function () {
-    // let imgTimer= setInterval(function(){
-    //     $("#imgcal").attr("src","https://unsplash.it/200/200");
-    //     clearInterval(imgTimer);
-    // },1000);
+
     $("#imgcal").attr("src", "https://unsplash.it/200/200");
-    // firstDayOfSelectedMonth = now.startOf('month');
+    
     now = now.startOf('month').subtract(1, 'days');
 
     setFirstLastDayOfMonth();
@@ -71,12 +67,10 @@ $("#prev").on("click", function () {
 
 });
 
+
+// Go to next month
 $("#next").on("click", function () {
-    // let imgTimer= setInterval(function(){
-    //     $("#imgcal").attr("src","https://unsplash.it/200/200");
-    //     clearInterval(imgTimer);
-    // },1000);
-    var img = "https://unsplash.it/200/200"
+    var img = "https://unsplash.it/200/200";
     $("#imgcal").attr("src", img);
 
     now = now.endOf('month').add(1, 'days');
@@ -94,6 +88,7 @@ $("#next").on("click", function () {
 
 });
 
+// The calendar is toggled visible or hidden on click
 $("#showHideBtn").on("click", function () {
     if (calendarVisible === false) {
         $("#prev").css("visibility", "visible");
@@ -113,6 +108,12 @@ $("#showHideBtn").on("click", function () {
     }
 });
 
+/**
+ * @description displayTimeSlots is most important function!!! **** NOTE  THIS****
+ * the function performs many operations like adding the controls to the timeslots
+ * adding the event handlers to the buttons and finally  calling fetch data from local storage
+ */
+
 function displayTimeSlots() {
     let timeLabelArr = ["9:AM", "10:AM", "11:AM", "12:PM", "1:PM", "2:PM", "3:PM", "4:PM", "5:PM"];
     let timeslotArr = ["9:AM", "10:AM", "11:AM", "12:PM", "13:PM", "14:PM", "15:PM", "16:PM", "17:PM"];
@@ -122,6 +123,7 @@ function displayTimeSlots() {
     timeslotArr.forEach(function (tSlot, index) {
         let ValLabelArray = timeLabelArr[index].split(":");
         let ValueArray = tSlot.split(":");
+
         // This is the full length div. It houses one label, one span for the input text  and one span for the lock unlock button
         let $timeslotDiv = $("<div>");
         $timeslotDiv.addClass("timeSlotDiv");
@@ -139,20 +141,20 @@ function displayTimeSlots() {
         $timeSlotItemText.addClass("timeSlotItemText");
 
         //Logic to color
+        // NOTE: - The t1 and t2 moment objects are like clones.
         let t1 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + ValueArray[0] + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
         let t2 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + ValueArray[0] + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
         t2.add(1, 'h');
 
-        // let t2 = moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A");
-        //t2=t1.add(1,'hours');
-        // console.log("t1",t1);
-        // console.log("t2",t2);
+
+        //check if the current time is between timeslot start and end time.
         if (moment().isBetween(t1, t2)) {
             $timeSlotItemText.css("background-color", "#e2b37b");
         }
-        else {
-            if (moment().isAfter(t2)) {
-                // if (moment().isAfter(moment(now.year() + "-" + (now.month() + 1) + "-" + now.date() + " " + (parseInt(ValueArray[0]) + 1) + ":00 " + ValueArray[1], "YYYY-MM-DD hh:mm A"))) {
+        else 
+        {
+            //color the items based on if the current moment is before or after the timeslot times.
+            if (moment().isAfter(t2)) {                
                 $timeSlotItemText.css("background-color", "#b4b4b4");
             }
             else {
@@ -173,6 +175,8 @@ function displayTimeSlots() {
         $inputItem.attr("id", "Input-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
         $inputItem.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
         $inputItem.attr("readonly", "true");
+
+        //*** Event when input text changes
         $inputItem.on("input", inputItemChanged);
         intputItemsIdArray.push(now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
 
@@ -184,6 +188,7 @@ function displayTimeSlots() {
         $inputItemCheck.attr("id", "Check-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
         $inputItemCheck.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
 
+        //*** Event when checbox is clicked
         $inputItemCheck.on("click", checkboxClicked);
 
         $unlockAndSaveBtn = $("<button>");
@@ -193,12 +198,18 @@ function displayTimeSlots() {
         $unlockAndSaveBtn.attr("id", "UnlockBtn-" + now.year() + "-" + now.month() + "-" + now.date() + "-" + ValueArray[0] + ValueArray[1]);
         $unlockAndSaveBtn.attr("data-id", now.year() + "-" + now.month() + "-" + now.date() + " " + ValueArray[0]);
 
-        //Give special attribute named 'btnState to the button. btnState will be in locked,unlocked and Save states
+        //******** PLEASE NOTE THE USE OF CUSTOM ATTRIBUTE NAMED btnSTATE */
+        //Give special attribute named 'btnState to the button. btnState will be in locked,unlocked and Save states        
         $unlockAndSaveBtn.attr("btnState", "locked");
 
         $unlockAndSaveBtn.html('<i class="fa fa-lock" aria-hidden="true"></i>');
+
+        /**
+         * unlockButtonClicked event is where the states of the button are handled
+         */
         $unlockAndSaveBtn.on("click", unlockButtonClicked);
 
+        // following code is to just append the controls to the right parent
         $timeSlotItemText.append($inputItem);
         $timeSlotItemText.append($inputItemCheck);
 
@@ -210,16 +221,22 @@ function displayTimeSlots() {
 
         $(".timeSlotsContainer").append($timeslotDiv);
     });
+    // call to get the data from the localStorage
     fetchAndShowItemText(intputItemsIdArray);
 }
 
+/**
+ * 
+ * @param {array} intputItemsIdArray 
+ * @description Function to fetch the item data from localStorage and show it to the user.
+ */
 function fetchAndShowItemText(intputItemsIdArray) {
     let objPointer = 0;
     if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
         wordaySchedulerStorageObject = {
             items: []
         };
-        // wordaySchedulerStorageObject.items.push(storageItem);
+        
         localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
         return;
     }
@@ -247,6 +264,11 @@ function fetchAndShowItemText(intputItemsIdArray) {
 
 }
 
+/**
+ * 
+ * @param {number} selectedMonth 
+ * @description display month function displays the calendar
+ */
 function displayMonth(selectedMonth) {
     const MonthsArr = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];
@@ -255,7 +277,7 @@ function displayMonth(selectedMonth) {
         $("#yearName").text(currentSelectedYear);
     }
     setMonthAndYearLabel();
-    //remove old btns
+    //*** remove old btns
     $(".daybtn").remove();
 
     let numDays = now.daysInMonth();
@@ -265,8 +287,6 @@ function displayMonth(selectedMonth) {
             $btn.text("--");
             $btn.addClass("daybtn");
             $btn.attr("disabled", "true");
-            // $btn.css("width", "35px");
-            // $btn.css("height", "35px");
             $("#day" + i).append($btn);
         }
     }
@@ -274,40 +294,29 @@ function displayMonth(selectedMonth) {
         $btn = $("<button>");
         $btn.text(n);
         $btn.addClass("daybtn");
-        // $btn.css("width", "35px");
-        // $btn.css("height", "35px");   
         $btn.attr("id", "calday" + n.toString());
         $btn.attr("data-id", now.year() + "-" + now.month() + "-" + n);
         $("#day" + moment([now.year(), now.month(), n]).day()).append($btn);
     }
-    // today=moment().format("YYYY-MM-dd");
+
     $today = $("button[data-id='" + moment().year() + "-" + moment().month() + "-" + moment().date() + "']");
     $today.css("background-color", "black");
     $today.css("border", "1px #e2b37b solid");
     return setMonthAndYearLabel;
 }
 
-// function showHideBackToTodayDiv(){
-//     if ((currentSelectedMonth + "-" + currentSelectedYear) !== (moment().month() + "-" + moment().year())) {
-//         $("#backToTodaydiv").css("visibility", "visible");
-//     }
-//     else {
-//         $("#backToTodaydiv").css("visibility", "hidden");
-//     }
-// }
 
+// Go back to Today on click
 $("#backToToday").on("click", function () {
     now = moment();
     setFirstLastDayOfMonth();
     let dispMonthAndYear = displayMonth(currentSelectedMonth);
-    dispMonthAndYear();
-    // displayMonth();
-    displayTimeSlots();
-    // showHideBackToTodayDiv();
+    dispMonthAndYear();    
+    displayTimeSlots();    
     $("#selectedDay").text(`${now.year()}-${parseInt(now.month()) + 1}-${now.date()}`);
 });
 
-
+// When a user selects a specific date on calendar 
 $(".calcontainer").on("click", "button", function () {
     let btnDataArr = $(this).data("id").split("-");
 
@@ -316,23 +325,10 @@ $(".calcontainer").on("click", "button", function () {
     setFirstLastDayOfMonth();
     displayTimeSlots();
     displayHTMLMessage(`<i class="fa fa-dot-circle-o" aria-hidden="true"></i> Selected ${btnDataArr[0]}-${parseInt(btnDataArr[1]) + 1}-${btnDataArr[2]}</span>`, "green");
-
-
-    // $("#message").css("background-color","green")
-    // $("#message").fadeIn(100);
-
-    // $("#message").text("Selected.");
-
-    // $("#message").fadeOut(4000);
-
 });
 
 
-
-// $(".inputItemCheck").on("click",function(){
-//     alert("checkbox clicked");
-// });
-
+// Mark the item isComplete true when the user clicks on checkbox
 function checkboxClicked() {
     let targetId = $(this).attr("id");
     if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
@@ -345,53 +341,37 @@ function checkboxClicked() {
         return;
     }
 
-    // let storageItem = {
-    //     id: targetId.replace("Check-", ""),
-    //     text: $("#" + targetId.replace("Check-", "Input-")).val(),
-    //     isComplete: $(this).prop("checked"),
-    // };
-    // if (localStorage.getItem("wordaySchedulerStorageObject") === null) {
-    //     wordaySchedulerStorageObject = {
-    //         items: []
-    //     };
-    //     wordaySchedulerStorageObject.items.push(storageItem);
-    //     localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
-    // }
-    // else {
+    //Get and Parse object from LocalStorage
     wordaySchedulerStorageObject = JSON.parse(localStorage.getItem("wordaySchedulerStorageObject"));
-    let index = wordaySchedulerStorageObject.items.findIndex(e => e.id === targetId.replace("Check-", ""));//storageItem.id);
+    let index = wordaySchedulerStorageObject.items.findIndex(e => e.id === targetId.replace("Check-", ""));
     if (index !== -1) {
-        // wordaySchedulerStorageObject.items[index] = storageItem;
         wordaySchedulerStorageObject.items[index].isComplete=$(this).prop("checked");
     }
     else {
-        // wordaySchedulerStorageObject.items.push(storageItem);
         $(this).prop("checked", false);
     }
     localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
-    // }
+    
     if ($(this).prop("checked")) {
         $("#" + targetId.replace("Check-", "Input-")).css("text-decoration", "line-through");
     }
     else {
         $("#" + targetId.replace("Check-", "Input-")).css("text-decoration", "none");
     }
-
 }
 
+
+//function / event handler when the unlock button is clicked.
+// this function takes several action based on its attribute called btnState.
 function unlockButtonClicked() {
     $(this).blur();
     let targetId = $(this).attr("id");
     let targetDataId = $(this).data().id;
     let ValueArray = targetDataId.split("-");
     let stringTargetId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2];
-    // let stringTargetHourAfterId = ValueArray[0] + "-" + (parseInt(ValueArray[1]) + 1) + "-" + ValueArray[2].split(" ")[0] + " " + (parseInt(ValueArray[2].split(" ")[1]) + 1);
-
+    
     let inputId = targetId.replace("UnlockBtn", "Input");
 
-    // console.log(stringTargetId);
-    // console.log(ValueArray[2]);
-    // console.log(stringTargetHourAfterId);
     let m1 = moment(stringTargetId, "YYYY-MM-DD hh:mm");
     let m2 = m1.clone();
     m2.add(1, 'h');
@@ -402,6 +382,7 @@ function unlockButtonClicked() {
         return;
     }
 
+    // if currently the button is locked
     if ($(this).attr("btnState") === "locked") {
         if (moment().isAfter(m2)) {
 
@@ -410,16 +391,17 @@ function unlockButtonClicked() {
         }
 
 
-        // unlockedButtonId =$(this).attr("id");
-
         $(this).html('<i class="fa fa-unlock" aria-hidden="true"></i>');
         $("#" + inputId).attr("readonly", false);
         $("#" + inputId).focus();
         $(this).attr("btnState", "unlocked");
     }
+
+    // if currently the button is in save state
     if ($(this).attr("btnState") === "save") {
         displayHTMLMessage('<span><i class="fa fa-spinner" aria-hidden="true"></i>Saving...</span>', "blue");
-        // save to local storage here
+        
+        // ******* save to local storage here ********
         let storageItem = {
             id: targetId.replace("UnlockBtn-", ""),
             text: $("#" + inputId).val(),
@@ -443,16 +425,16 @@ function unlockButtonClicked() {
             }
             localStorage.setItem("wordaySchedulerStorageObject", JSON.stringify(wordaySchedulerStorageObject));
         }
-
-        // wordaySchedulerStorageObject.items.push(StorageItemObject);
+        
         $(this).attr("btnState", "locked");
         $(this).html('<i class="fa fa-lock" aria-hidden="true"></i>')
         $("#" + inputId).attr("readonly", true);
     }
 }
 
-function inputItemChanged() {
-    // alert("change : " + $(this).val().trim() );
+
+// Event handler when the text in the input changes
+function inputItemChanged() {    
     let targetId, btnTarget;
     targetId = $(this).attr("id");
     btnTarget = targetId.replace("Input", "UnlockBtn");
@@ -466,6 +448,8 @@ function inputItemChanged() {
     }
 }
 
+
+// Utility function to display text message on the screen
 function displayMessage(msg, color, fadeInTime, fadeOutTime) {
     if (color === undefined) {
         color = "red";
@@ -479,11 +463,10 @@ function displayMessage(msg, color, fadeInTime, fadeOutTime) {
     $("#message").css("background-color", color)
     $("#message").fadeIn(fadeInTime);
     $("#message").text(msg);
-    $("#message").fadeOut(fadeOutTime).delay(200);
-    //reset back to red color
-    // $("#message").delay(fadeOutTime).css("background-color","red");
+    $("#message").fadeOut(fadeOutTime).delay(200);    
 }
 
+// Utility function to display HTML message on the screen
 function displayHTMLMessage(msg, color, fadeInTime, fadeOutTime) {
     if (color === undefined) {
         color = "red";
@@ -497,8 +480,5 @@ function displayHTMLMessage(msg, color, fadeInTime, fadeOutTime) {
     $("#message").css("background-color", color)
     $("#message").fadeIn(fadeInTime);
     $("#message").html(msg);
-    $("#message").fadeOut(fadeOutTime).delay(200);
-    //reset back to red color and empty
-    // $("#message").empty();
-    // $("#message").css("background-color","red");
+    $("#message").fadeOut(fadeOutTime).delay(200);    
 }
