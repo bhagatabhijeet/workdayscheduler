@@ -61,7 +61,7 @@ Note: - you can mark the item completed **only if it exists.** If you try to mar
 </div>
 <hr>
 
-7. Each item (item which is already available in storage) can be in 2 states - isComplete === false and isComplete === true. The completed items text will be striked through to visually show the completed item. In addition the completed item checkbox is 'purple' in color which is another visual clue to the user.
+7. Each item (item which is already available in storage) can be in one of 2 states - isComplete === false or isComplete === true. The completed items text will be striked through to visually show the completed item. In addition the completed item checkbox is 'purple' in color which is another visual clue to the user.
 <div align="center">
 <img src="images/complete_incomplete.png"/>
 </div>
