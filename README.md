@@ -36,7 +36,7 @@ workdayscheduler is a simple calendar application that allows the user to save e
 </div>
 <hr/>
 
-2. If the current selected date is in future or past to can come back to current date by clicking "Back to today" button.
+2. If the current selected date is in future or past user can come back to current date by clicking "Back to today" button.
 <div align="center">
 <img src="images/back_to_today.png"/>
 </div>
